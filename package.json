@@ -1,0 +1,16 @@
+{
+  "name": "devlocal",
+  "version": "1.0.0",
+  "description": "A utility to navigate to projects, set environment variables and run arbitrary commands.",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Scott Page",
+  "license": "ISC",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "prettier": "^2.8.8",
+    "zx": "^7.2.2"
+  }
+}

@@ -1,0 +1,8 @@
+variables:
+  - name: baseDir
+    value: /Users/scottpage/Projects
+items:
+  - devlocal:
+    dir: devlocal
+  - bayer:
+    dir: Bayer
