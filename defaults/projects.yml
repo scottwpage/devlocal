@@ -1,15 +1,10 @@
-items:
-  devlocal:
-    dir: devlocal
-    aliases: ['dl']
-    env:
-      - DL_TOKEN: abc123
-    cmds:
-      - git-branch: ['git branch']
-  bayer:
-    dir: Bayer
-    aliases: ['bcs']
-    env:
-      - DL_TOKEN: abc123
-    cmds:
-      - git-branch: ['git branch']
+devlocal:
+  dir: devlocal
+  aliases: ['dl']
+  env:
+    DL_TOKEN: abc123
+  cmds:
+    git-branch: ['git', '-v']
+bayer:
+  dir: Bayer
+  aliases: ['bcs']
