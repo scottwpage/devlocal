@@ -3,6 +3,9 @@
 // import ZX global for better autocomplete
 import 'zx/globals';
 
+// Don't print commands
+$.verbose = false;
+
 const baseDir = `${os.homedir()}/.devlocal`;
 const configFiles = {
   projects: {},
@@ -11,7 +14,6 @@ const configFiles = {
 };
 
 const usage = () => {
-  // console.log(configFiles.projects);
   echo('Projects:');
   for (let project in configFiles.projects) {
     echo`  ${chalk.blue(`${project}`)}`;
@@ -43,39 +45,45 @@ const init = () => {
 // --------------------------------------------------------------------------------------------- //
 init();
 
-console.log({ projects: configFiles.projects });
 const [_, cmd, project] = argv._;
-console.log({ cmd, project });
 
 if (!cmd && !project) {
   usage();
   process.exit(0);
 }
 
-let selectedProject = configFiles.projects[project] || { dir: project };
+const commands = [];
+const selectedProject = configFiles.projects[project] || { dir: project };
 
 if (project) {
-  // Set specified environment variables
-  const envs = selectedProject?.env || {};
-  for (const [key, value] of Object.entries(envs)) {
-    await $`export env ${key}="${value}"`;
-  }
-
-  cd(`${configFiles.variables.baseDir}/${selectedProject.dir}`);
+  const targetDir = `${configFiles.variables.baseDir}/${selectedProject.dir}`;
+  commands.push(`cd ${targetDir}`);
+  cd(targetDir);
   if (fs.existsSync('.git')) {
     $`git branch`;
   }
+
+  // Set specified environment variables
+  const envs = selectedProject['env'] || {};
+  for (const [key, value] of Object.entries(envs)) {
+    commands.push(`export env ${key}="${value}"`);
+  }
 }
 
-if (cmd !== '') {
+if (cmd) {
   // Choose project-specific command or general command
-  console.log({ selectedProject, commands: configFiles.commands });
+  // console.log({ selectedProject, commands: configFiles.commands });
   const command = selectedProject.cmds?.[cmd] || configFiles.commands[cmd];
-  console.log({ command });
+  // console.log({ command });
   if (command) {
-    await $`${command}`;
+    commands.push(command);
   } else {
     echo(`Command not found: ${cmd}`);
     process.exit(1);
   }
+}
+
+if (commands.length) {
+  commands.unshift('set -o pipefail');
+  fs.writeFileSync(`${baseDir}/commands.sh`, commands.join('\n'));
 }

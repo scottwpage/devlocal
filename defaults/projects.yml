@@ -2,9 +2,10 @@ devlocal:
   dir: devlocal
   aliases: ['dl']
   env:
+    DL_SERVICE_KEY: 123abc
     DL_TOKEN: abc123
   cmds:
-    git-branch: ['git', '-v']
+    git-branch: 'git -v'
 bayer:
   dir: Bayer
   aliases: ['bcs']
