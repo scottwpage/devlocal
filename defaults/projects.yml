@@ -1,8 +1,12 @@
-variables:
-  - name: baseDir
-    value: /Users/scottpage/Projects
-items:
-  - devlocal:
-    dir: devlocal
-  - bayer:
-    dir: Bayer
+devlocal:
+  dir: devlocal
+  aliases: ['dl']
+myapp:
+  dir: my-app
+  aliases: ['app', 'my-app']
+  env:
+    ENV_SETTING1: value1
+    ENV_SETTING2: value2
+  cmds:
+    build: yarn build
+    run: yarn start
