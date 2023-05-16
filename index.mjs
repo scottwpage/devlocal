@@ -42,6 +42,23 @@ const init = () => {
   }
 };
 
+const getSelectedProject = (project) => {
+  if (configFiles.projects[project]) {
+    return configFiles.projects[project];
+  }
+
+  let selectedProject = { dir: project };
+  for (let key of Object.keys(configFiles.projects)) {
+    const aliases = configFiles.projects[key]?.aliases || [];
+    if (aliases.includes(project)) {
+      selectedProject = configFiles.projects[key];
+      break;
+    }
+  }
+
+  return selectedProject;
+};
+
 // --------------------------------------------------------------------------------------------- //
 init();
 
@@ -53,7 +70,7 @@ if (!cmd && !project) {
 }
 
 const commands = [];
-const selectedProject = configFiles.projects[project] || { dir: project };
+const selectedProject = getSelectedProject(project);
 
 if (project) {
   const targetDir = `${configFiles.variables.baseDir}/${selectedProject.dir}`;
@@ -72,9 +89,7 @@ if (project) {
 
 if (cmd) {
   // Choose project-specific command or general command
-  // console.log({ selectedProject, commands: configFiles.commands });
   const command = selectedProject.cmds?.[cmd] || configFiles.commands[cmd];
-  // console.log({ command });
   if (command) {
     commands.push(command);
   } else {
@@ -85,5 +100,7 @@ if (cmd) {
 
 if (commands.length) {
   commands.unshift('set -o pipefail');
-  fs.writeFileSync(`${baseDir}/commands.sh`, commands.join('\n'));
+  const commandsPath = `${baseDir}/commands.sh`;
+  fs.rmSync(commandsPath, { force: true });
+  fs.writeFileSync(commandsPath, commands.join('\n'));
 }
