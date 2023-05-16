@@ -12,20 +12,24 @@ const { projects: PROJECTS, commands: COMMANDS, config: CONFIG } = configFiles;
 
 const usage = () => {
   let cmd;
-  // console.log({ PROJECTS });
+  echo(chalk.white.bgBlue.bold('\n** devlocal **`'));
+  echo(
+    `\nNavigate between projects, set env variables and run commands.
+    \nUsage:  dl <command> [<project>]
+   or:  go <project>`
+  );
 
-  echo(`${chalk.blueBright('Projects:')}`);
+  echo('\nProjects  and project-specific commands');
   for (let project of Object.keys(PROJECTS)) {
-    // console.log({ project });
-    echo`  ${chalk.blue(`${project}`)}`;
+    echo(`  ${chalk.blue(`${project}`)}`);
     for (cmd in PROJECTS[project]?.cmds || []) {
       echo(`    ${chalk.green(`${cmd}`)}`);
     }
   }
 
-  echo(`\n${chalk.greenBright('Commands:')}`);
+  echo('\nGeneral commands');
   for (cmd in COMMANDS) {
-    echo`  ${chalk.green(`${cmd}`)}`;
+    echo(`  ${chalk.green(`${cmd}`)}`);
   }
 };
 
@@ -67,7 +71,7 @@ const getSelectedProject = (project) => {
   return selectedProject;
 };
 
-// --------------------------------------------------------------------------------------------- //
+//* =========================================================================================== *//
 init();
 
 const [_, cmd, project] = argv._;
@@ -77,8 +81,8 @@ if (!cmd && !project) {
   process.exit(0);
 }
 
-const output = [];
 const selectedProject = getSelectedProject(project);
+const output = [];
 
 if (project) {
   const targetDir = `${CONFIG.baseDir}/${selectedProject.dir}`;
