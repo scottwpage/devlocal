@@ -7,51 +7,59 @@ import 'zx/globals';
 $.verbose = false;
 
 const baseDir = `${os.homedir()}/.devlocal`;
-const configFiles = {
-  projects: {},
-  commands: {},
-  variables: {},
-};
+const configFiles = { projects: {}, commands: {}, config: {} };
+const { projects: PROJECTS, commands: COMMANDS, config: CONFIG } = configFiles;
 
 const usage = () => {
-  echo('Projects:');
-  for (let project in configFiles.projects) {
-    echo`  ${chalk.blue(`${project}`)}`;
-  }
-  // TODO: add project commands
+  let cmd;
+  // console.log({ PROJECTS });
 
-  echo('Commands:');
-  for (let cmd in configFiles.commands) {
-    echo`  ${chalk.blue(`${cmd}`)}`;
+  echo(`${chalk.blueBright('Projects:')}`);
+  for (let project of Object.keys(PROJECTS)) {
+    // console.log({ project });
+    echo`  ${chalk.blue(`${project}`)}`;
+    for (cmd in PROJECTS[project]?.cmds || []) {
+      echo(`    ${chalk.green(`${cmd}`)}`);
+    }
+  }
+
+  echo(`\n${chalk.greenBright('Commands:')}`);
+  for (cmd in COMMANDS) {
+    echo`  ${chalk.green(`${cmd}`)}`;
   }
 };
 
 const init = () => {
+  const configKeys = Object.keys(configFiles);
+
   // Copy yml files to ~/.devlocal
   if (!fs.existsSync(baseDir)) {
     fs.mkdirSync(baseDir);
-    for (let configFile of Object.keys(configFiles)) {
+    for (let configFile of configKeys) {
       echo(`Creating ${baseDir}/${configFile}.yml`);
       fs.copyFileSync(`./defaults/${configFile}.yml`, `${baseDir}/${configFile}.yml`);
     }
   }
 
   // Load yml files
-  for (let configFile of Object.keys(configFiles)) {
-    configFiles[configFile] = YAML.parse(fs.readFileSync(`${baseDir}/${configFile}.yml`, 'utf8'));
+  for (let configFile of configKeys) {
+    const parsed = YAML.parse(fs.readFileSync(`${baseDir}/${configFile}.yml`, 'utf8'));
+    configFiles[configFile] = Object.assign(configFiles[configFile], parsed);
   }
 };
 
 const getSelectedProject = (project) => {
-  if (configFiles.projects[project]) {
-    return configFiles.projects[project];
-  }
+  let selectedProject = PROJECTS[project];
 
-  let selectedProject = { dir: project };
-  for (let key of Object.keys(configFiles.projects)) {
-    const aliases = configFiles.projects[key]?.aliases || [];
+  if (selectedProject) return selectedProject;
+
+  selectedProject = { dir: project };
+
+  // Look for aliases
+  for (let key of Object.keys(PROJECTS)) {
+    const aliases = PROJECTS[key]?.aliases || [];
     if (aliases.includes(project)) {
-      selectedProject = configFiles.projects[key];
+      selectedProject = PROJECTS[key];
       break;
     }
   }
@@ -69,12 +77,12 @@ if (!cmd && !project) {
   process.exit(0);
 }
 
-const commands = [];
+const output = [];
 const selectedProject = getSelectedProject(project);
 
 if (project) {
-  const targetDir = `${configFiles.variables.baseDir}/${selectedProject.dir}`;
-  commands.push(`cd ${targetDir}`);
+  const targetDir = `${CONFIG.baseDir}/${selectedProject.dir}`;
+  output.push(`cd ${targetDir}`);
   cd(targetDir);
   if (fs.existsSync('.git')) {
     $`git branch`;
@@ -83,24 +91,26 @@ if (project) {
   // Set specified environment variables
   const envs = selectedProject['env'] || {};
   for (const [key, value] of Object.entries(envs)) {
-    commands.push(`export env ${key}="${value}"`);
+    output.push(`export env ${key}="${value}"`);
   }
 }
 
 if (cmd) {
-  // Choose project-specific command or general command
-  const command = selectedProject.cmds?.[cmd] || configFiles.commands[cmd];
+  // Choose project-specific command over general command
+  const command = selectedProject.cmds?.[cmd] || COMMANDS[cmd];
   if (command) {
-    commands.push(command);
+    output.push(command);
   } else {
     echo(`Command not found: ${cmd}`);
     process.exit(1);
   }
 }
 
-if (commands.length) {
-  commands.unshift('set -o pipefail');
-  const commandsPath = `${baseDir}/commands.sh`;
-  fs.rmSync(commandsPath, { force: true });
-  fs.writeFileSync(commandsPath, commands.join('\n'));
+if (output.length) {
+  // Create an output file that can be sourced as simply running commands from
+  // this script will not actually change the directory or set env vars.
+  output.unshift('set -o pipefail'); // Bail out immediately if any commands fail
+  const outputPath = `${baseDir}/commands.sh`;
+  fs.rmSync(outputPath, { force: true });
+  fs.writeFileSync(outputPath, output.join('\n'));
 }
