@@ -7,12 +7,13 @@ import 'zx/globals';
 $.verbose = false;
 
 const baseDir = `${os.homedir()}/.devlocal`;
+const outputPath = `${baseDir}/commands.sh`;
 const configFiles = { projects: {}, commands: {}, config: {} };
 const { projects: PROJECTS, commands: COMMANDS, config: CONFIG } = configFiles;
 
 const usage = () => {
   let cmd;
-  echo(chalk.white.bgBlue.bold('\n** devlocal **`'));
+  echo(chalk.white.bgBlue.bold('\n** devlocal **'));
   echo(
     `\nNavigate between projects, set env variables and run commands.
     \nUsage:  dl <command> [<project>]
@@ -36,8 +37,11 @@ const usage = () => {
 const init = () => {
   const configKeys = Object.keys(configFiles);
 
-  // Copy yml files to ~/.devlocal
-  if (!fs.existsSync(baseDir)) {
+  if (fs.existsSync(baseDir)) {
+    // Remove `commands.sh` from previous session
+    fs.rmSync(outputPath, { force: true });
+  } else {
+    // Copy yml files to ~/.devlocal
     fs.mkdirSync(baseDir);
     for (let configFile of configKeys) {
       echo(`Creating ${baseDir}/${configFile}.yml`);
@@ -114,7 +118,6 @@ if (output.length) {
   // Create an output file that can be sourced as simply running commands from
   // this script will not actually change the directory or set env vars.
   output.unshift('set -o pipefail'); // Bail out immediately if any commands fail
-  const outputPath = `${baseDir}/commands.sh`;
-  fs.rmSync(outputPath, { force: true });
+
   fs.writeFileSync(outputPath, output.join('\n'));
 }

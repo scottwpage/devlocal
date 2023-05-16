@@ -1,11 +1,12 @@
 devlocal:
   dir: devlocal
   aliases: ['dl']
+myapp:
+  dir: my-app
+  aliases: ['app', 'my-app']
   env:
-    DL_SERVICE_KEY: 123abc
-    DL_TOKEN: abc123
+    ENV_SETTING1: value1
+    ENV_SETTING2: value2
   cmds:
-    git-branch: 'git -v'
-bayer:
-  dir: Bayer
-  aliases: ['bcs']
+    build: yarn build
+    run: yarn start

@@ -1,1 +1,2 @@
-git-branch: 'git branch'
+build: npm build
+run: npm start
