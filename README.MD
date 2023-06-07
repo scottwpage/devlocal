@@ -25,17 +25,18 @@ A utility to navigate to projects, set environment variables and run arbitrary c
 
 ## Installation
 
-### Clone `devlocal` repo
+### Install Google ZX
+
+`npm i -g zx`
+
+### Clone `devlocal` repo and install
 
 ```bash
 cd ~/Projects # Update path to reflect your location
 git clone https://github.com/scottwpage/devlocal.git
 cd devlocal
+npm i
 ```
-
-### Install Google ZX
-
-`npm i -g zx`
 
 ### Add functions to `.zshrc` (or `.bashrc`)
 
@@ -44,7 +45,9 @@ cd devlocal
 function dl() {
   ~/Projects/devlocal/index.mjs "${1}" "${2}" # Change path to reflect your projects directory
   sourcePath=~/.devlocal/commands.sh
-  [ -f $sourcePath ] && (source $sourcePath || echo 'failed')
+  [ -f $sourcePath ]; then
+    source $sourcePath || echo 'failed'
+  fi
 }
 
 # Change directory to a project
