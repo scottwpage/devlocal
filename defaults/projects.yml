@@ -7,6 +7,8 @@ myapp:
   env:
     ENV_SETTING1: value1
     ENV_SETTING2: value2
+  init_cmds:
+    - nvm use 18
   cmds:
     build: yarn build
     run: yarn start
