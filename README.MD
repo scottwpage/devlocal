@@ -100,7 +100,7 @@ myapp:
   env: # Environment variables set when navigating to a project (optional)
     ENV_SETTING1: value1
     ENV_SETTING2: value2
-  init_cmds: # Commands to run after navigating to a project
+  init_cmds: # Commands to run after navigating to a project (optional)
     - nvm use 18
   cmds: # project-specific commands that can over-ride general commands (optional)
     build: 'yarn build'
