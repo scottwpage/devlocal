@@ -20,7 +20,7 @@ const usage = () => {
    or:  go <project>`
   );
 
-  echo('\nProjects  and project-specific commands');
+  echo('\nProjects and project-specific commands');
   for (let project of Object.keys(PROJECTS)) {
     echo(`  ${chalk.blue(`${project}`)}`);
     for (cmd in PROJECTS[project]?.cmds || []) {
@@ -91,15 +91,23 @@ const output = [];
 if (project) {
   const targetDir = `${CONFIG.baseDir}/${selectedProject.dir}`;
   output.push(`cd ${targetDir}`);
-  cd(targetDir);
-  if (fs.existsSync('.git')) {
-    $`git branch`;
-  }
 
   // Set specified environment variables
   const envs = selectedProject['env'] || {};
   for (const [key, value] of Object.entries(envs)) {
     output.push(`export env ${key}="${value}"`);
+  }
+
+  if (!cmd) {
+    cd(targetDir);
+    if (fs.existsSync('.git')) {
+      echo(await $`git branch`);
+    }
+    // Run any specified init commands after navigating to project
+    const initCommands = selectedProject['init_cmds'] || [];
+    for (const cmd of initCommands) {
+      output.push(cmd);
+    }
   }
 }
 
@@ -118,6 +126,7 @@ if (output.length) {
   // Create an output file that can be sourced as simply running commands from
   // this script will not actually change the directory or set env vars.
   output.unshift('set -o pipefail'); // Bail out immediately if any commands fail
-
-  fs.writeFileSync(outputPath, output.join('\n'));
+  const commands = output.join('\n');
+  echo(commands);
+  fs.writeFileSync(outputPath, commands);
 }
