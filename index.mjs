@@ -21,15 +21,15 @@ const usage = () => {
   );
 
   echo('\nProjects and project-specific commands');
-  for (let project of Object.keys(PROJECTS)) {
+  for (let project of Object.keys(PROJECTS).sort()) {
     echo(`  ${chalk.blue(`${project}`)}`);
-    for (cmd in PROJECTS[project]?.cmds || []) {
+    for (cmd of Object.keys(PROJECTS[project]?.cmds || []).sort()) {
       echo(`    ${chalk.green(`${cmd}`)}`);
     }
   }
 
   echo('\nGeneral commands');
-  for (cmd in COMMANDS) {
+  for (cmd of Object.keys(COMMANDS).sort()) {
     echo(`  ${chalk.green(`${cmd}`)}`);
   }
 };
