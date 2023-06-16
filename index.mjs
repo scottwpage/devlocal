@@ -127,6 +127,6 @@ if (output.length) {
   // this script will not actually change the directory or set env vars.
   output.unshift('set -o pipefail'); // Bail out immediately if any commands fail
   const commands = output.join('\n');
-  echo(commands);
+  CONFIG?.verbose && echo(commands);
   fs.writeFileSync(outputPath, commands);
 }
