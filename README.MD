@@ -115,6 +115,7 @@ myapp:
   # Non project-specific commands
   build: 'npm build'
   run: 'npm start
+  foo: ['cd foo', 'ls -la', 'cd -'] # This will be interpreted as `cd foo && ls -la && cd -`
 ```
 
 ### Customize Config
@@ -123,5 +124,4 @@ myapp:
 
 ```yml
 baseDir: /Users/<USERNAME>/Projects # Update to reflect your projects location
-verbose: 0
 ```
