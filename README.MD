@@ -124,4 +124,5 @@ myapp:
 
 ```yml
 baseDir: /Users/<USERNAME>/Projects # Update to reflect your projects location
+verbose: 0
 ```
