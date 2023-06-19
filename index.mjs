@@ -115,7 +115,7 @@ if (cmd) {
   // Choose project-specific command over general command
   const command = selectedProject.cmds?.[cmd] || COMMANDS[cmd];
   if (command) {
-    output.push(command);
+    output.push(Array.isArray(command) ? command.join(' && ') : command);
   } else {
     echo(`Command not found: ${cmd}`);
     process.exit(1);
