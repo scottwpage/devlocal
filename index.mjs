@@ -21,7 +21,9 @@ const usage = () => {
   );
 
   echo('\nProjects and project-specific commands');
-  for (let project of Object.keys(PROJECTS).sort()) {
+  const projects = new Set(Object.keys(PROJECTS).concat(fs.readdirSync(CONFIG.baseDir)).sort());
+  projects.delete('.DS_Store');
+  for (let project of projects) {
     echo(`  ${chalk.blue(`${project}`)}`);
     for (cmd of Object.keys(PROJECTS[project]?.cmds || []).sort()) {
       echo(`    ${chalk.green(`${cmd}`)}`);
