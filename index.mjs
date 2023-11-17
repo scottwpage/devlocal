@@ -27,8 +27,7 @@ const usage = () => {
   );
 
   echo('\nProjects and project-specific commands');
-  const projects = getProjects();
-  for (let project of projects) {
+  for (let project of getProjects()) {
     echo(`  ${chalk.blue(`${project}`)}`);
     for (cmd of Object.keys(PROJECTS[project]?.cmds || []).sort()) {
       echo(`    ${chalk.green(`${cmd}`)}`);
