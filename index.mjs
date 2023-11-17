@@ -11,6 +11,12 @@ const outputPath = `${baseDir}/commands.sh`;
 const configFiles = { projects: {}, commands: {}, config: {} };
 const { projects: PROJECTS, commands: COMMANDS, config: CONFIG } = configFiles;
 
+const getProjects = (target = CONFIG.baseDir) => {
+  return fs.readdirSync(target, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
+}
+
 const usage = () => {
   let cmd;
   echo(chalk.white.bgBlue.bold('\n** devlocal **'));
@@ -21,8 +27,7 @@ const usage = () => {
   );
 
   echo('\nProjects and project-specific commands');
-  const projects = new Set(Object.keys(PROJECTS).concat(fs.readdirSync(CONFIG.baseDir)).sort());
-  projects.delete('.DS_Store');
+  const projects = getProjects();
   for (let project of projects) {
     echo(`  ${chalk.blue(`${project}`)}`);
     for (cmd of Object.keys(PROJECTS[project]?.cmds || []).sort()) {
