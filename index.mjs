@@ -131,8 +131,7 @@ if (cmd) {
 if (output.length) {
   // Create an output file that can be sourced as simply running commands from
   // this script will not actually change the directory or set env vars.
+  CONFIG?.verbose && echo(output.join('\n') + '\n');
   output.unshift('set -o pipefail'); // Bail out immediately if any commands fail
-  const commands = output.join('\n');
-  CONFIG?.verbose && echo(commands);
-  fs.writeFileSync(outputPath, commands);
+  fs.writeFileSync(outputPath, output.join('\n'));
 }
