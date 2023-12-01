@@ -38,6 +38,7 @@ const usage = () => {
   for (cmd of Object.keys(COMMANDS).sort()) {
     echo(`  ${chalk.green(`${cmd}`)}`);
   }
+  echo('');
 };
 
 const init = () => {
@@ -133,5 +134,6 @@ if (output.length) {
   // this script will not actually change the directory or set env vars.
   CONFIG?.verbose && echo(output.join('\n') + '\n');
   output.unshift('set -o pipefail'); // Bail out immediately if any commands fail
+  output.push('echo');
   fs.writeFileSync(outputPath, output.join('\n'));
 }
