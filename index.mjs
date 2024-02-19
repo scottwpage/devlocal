@@ -11,11 +11,26 @@ const outputPath = `${baseDir}/commands.sh`;
 const configFiles = { projects: {}, commands: {}, config: {} };
 const { projects: PROJECTS, commands: COMMANDS, config: CONFIG } = configFiles;
 
-const getProjects = (target = CONFIG.baseDir) => {
-  return fs.readdirSync(target, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name);
-}
+const REPOS = [];
+
+const findRepos = (directory = CONFIG.baseDir) => {
+  if (fs.existsSync(`${directory}/.git`)) {
+    const relativePath = directory.replace(CONFIG.baseDir, '');
+    const parts = relativePath.split('/');
+    const repo = parts.pop();
+    REPOS.push([repo, relativePath]);
+    return;
+  }
+
+  const folders = fs
+    .readdirSync(directory, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+
+  for (const folder of folders) {
+    findRepos(`${directory}/${folder}`);
+  }
+};
 
 const usage = () => {
   let cmd;
@@ -27,9 +42,10 @@ const usage = () => {
   );
 
   echo('\nProjects and project-specific commands');
-  for (let project of getProjects()) {
-    echo(`  ${chalk.blue(`${project}`)}`);
-    for (cmd of Object.keys(PROJECTS[project]?.cmds || []).sort()) {
+  const repos = REPOS.map((p) => p[0]).sort();
+  for (const repo of repos) {
+    echo(`  ${chalk.blue(`${repo}`)}`);
+    for (cmd of Object.keys(PROJECTS[repo]?.cmds || []).sort()) {
       echo(`    ${chalk.green(`${cmd}`)}`);
     }
   }
@@ -61,14 +77,14 @@ const init = () => {
     const parsed = YAML.parse(fs.readFileSync(`${baseDir}/${configFile}.yml`, 'utf8'));
     configFiles[configFile] = Object.assign(configFiles[configFile], parsed);
   }
+
+  findRepos();
 };
 
 const getSelectedProject = (project) => {
   let selectedProject = PROJECTS[project];
 
   if (selectedProject) return selectedProject;
-
-  selectedProject = { dir: project };
 
   // Look for aliases
   for (let key of Object.keys(PROJECTS)) {
@@ -77,6 +93,11 @@ const getSelectedProject = (project) => {
       selectedProject = PROJECTS[key];
       break;
     }
+  }
+
+  if (!selectedProject) {
+    const repo = REPOS.find((i) => i[0] === project);
+    if (repo) return { dir: repo[1] };
   }
 
   return selectedProject;
@@ -120,7 +141,7 @@ if (project) {
 
 if (cmd) {
   // Choose project-specific command over general command
-  const command = selectedProject.cmds?.[cmd] || COMMANDS[cmd];
+  const command = selectedProject?.cmds?.[cmd] || COMMANDS[cmd];
   if (command) {
     output.push(Array.isArray(command) ? command.join(' && ') : command);
   } else {
