@@ -15,7 +15,7 @@ const REPOS = [];
 
 const findRepos = (directory = CONFIG.baseDir) => {
   if (fs.existsSync(`${directory}/.git`)) {
-    const relativePath = directory.replace(CONFIG.baseDir, '');
+    const relativePath = directory.replace(`${CONFIG.baseDir}/`, '');
     const parts = relativePath.split('/');
     const repo = parts.pop();
     REPOS.push([repo, relativePath]);
