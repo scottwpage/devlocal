@@ -13,6 +13,12 @@ const { projects: PROJECTS, commands: COMMANDS, config: CONFIG } = configFiles;
 
 const REPOS = [];
 
+const getDirectories = (directory) =>
+  fs
+    .readdirSync(directory, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+
 const findRepos = (directory = CONFIG.baseDir) => {
   if (fs.existsSync(`${directory}/.git`)) {
     const relativePath = directory.replace(`${CONFIG.baseDir}/`, '');
@@ -22,15 +28,11 @@ const findRepos = (directory = CONFIG.baseDir) => {
     return;
   }
 
-  const folders = fs
-    .readdirSync(directory, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
-
-  for (const folder of folders) {
+  for (const folder of getDirectories(directory)) {
     findRepos(`${directory}/${folder}`);
   }
 };
+
 
 const usage = () => {
   let cmd;
