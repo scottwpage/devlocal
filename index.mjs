@@ -44,9 +44,11 @@ const usage = () => {
   );
 
   echo('\nProjects and project-specific commands');
-  const repos = REPOS.map((p) => p[0]).sort();
-  for (const repo of repos) {
-    echo(`  ${chalk.blue(`${repo}`)}`);
+  const repos = REPOS.map((p) => `${p[0]}|${p[1]}`).sort();
+  for (const items of repos) {
+    const { repo, dir } = items.split('|');
+    dir.pop(); // Remove repo name
+    echo(`  ${chalk.blue(`${repo}`)} (${dir})`);
     for (cmd of Object.keys(PROJECTS[repo]?.cmds || []).sort()) {
       echo(`    ${chalk.green(`${cmd}`)}`);
     }
