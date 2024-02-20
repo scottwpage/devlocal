@@ -57,7 +57,11 @@ const usage = () => {
   }, []).sort();
 
   for (const repoPlusDir of repos) {
-    const [repo, dir] = repoPlusDir.split('|');
+    let [repo, dir] = repoPlusDir.split('|');
+    if (CONFIG.repoListingDirAlias) {
+      const [from, to] = CONFIG.repoListingDirAlias;
+      dir = dir.replace(from, to);
+    }
     const dirSegments = dir.split('/');
     dirSegments.pop(); // remove repo name
     echo(chalk.blue(repo), ' '.repeat(padding - repo.length), dirSegments.join('/'));
