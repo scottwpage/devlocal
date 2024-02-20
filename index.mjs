@@ -49,10 +49,9 @@ const usage = () => {
 
   const repos = REPOS.reduce((accum, item) => {
     const repo = item[0];
+    const chars = repo.length;
+    padding = chars > padding ? chars : padding;
     accum.push(`${repo}|${item[1]}`);
-    if (repo.length > padding) {
-      padding = repo.length;
-    }
     return accum;
   }, []).sort();
 
@@ -60,9 +59,7 @@ const usage = () => {
     const [repo, dir] = repoPlusDir.split('|');
     const dirSegments = dir.split('/');
     dirSegments.pop(); // remove repo name
-    echo(
-      `  ${chalk.blue(`${repo}`)} ${' '.repeat(padding - repo.length)} ${dirSegments.join('/')}`
-    );
+    echo(`  ${chalk.blue(`${repo}`)} ${' '.repeat(padding - repo.length)}${dirSegments.join('/')}`);
 
     for (cmd of Object.keys(PROJECTS[repo]?.cmds || []).sort()) {
       echo(`    ${chalk.green(`${cmd}`)}`);
