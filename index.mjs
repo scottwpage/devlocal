@@ -43,7 +43,9 @@ const usage = () => {
    or:  go <project>`
   );
 
-  echo('\nProjects and project-specific commands');
+  echo(`\n${chalk.blue('Projects')}`);
+  echo(`  project-specific ${chalk.green('commands')}`);
+  echo('-'.repeat(40));
 
   let padding = 0;
 
@@ -59,16 +61,16 @@ const usage = () => {
     const [repo, dir] = repoPlusDir.split('|');
     const dirSegments = dir.split('/');
     dirSegments.pop(); // remove repo name
-    echo(`  ${chalk.blue(`${repo}`)} ${' '.repeat(padding - repo.length)}${dirSegments.join('/')}`);
+    echo(chalk.blue(repo), ' '.repeat(padding - repo.length), dirSegments.join('/'));
 
     for (cmd of Object.keys(PROJECTS[repo]?.cmds || []).sort()) {
-      echo(`    ${chalk.green(`${cmd}`)}`);
+      echo(`  ${chalk.green(cmd)}`);
     }
   }
 
   echo('\nGeneral commands');
   for (cmd of Object.keys(COMMANDS).sort()) {
-    echo(`  ${chalk.green(`${cmd}`)}`);
+    echo(`  ${chalk.green(cmd)}`);
   }
   echo('');
 };
