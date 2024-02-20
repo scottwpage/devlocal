@@ -24,7 +24,7 @@ const findRepos = (directory = CONFIG.baseDir) => {
     const relativePath = directory.replace(`${CONFIG.baseDir}/`, '');
     const parts = relativePath.split('/');
     const repo = parts.pop();
-    REPOS.push([repo, relativePath]);
+    REPOS.push([repo.toLowerCase(), relativePath]);
     return;
   }
 
@@ -32,7 +32,6 @@ const findRepos = (directory = CONFIG.baseDir) => {
     findRepos(`${directory}/${folder}`);
   }
 };
-
 
 const usage = () => {
   let cmd;
@@ -114,7 +113,7 @@ const getSelectedProject = (project) => {
   }
 
   if (!selectedProject) {
-    const repo = REPOS.find((i) => i[0] === project);
+    const repo = REPOS.find((i) => i[0] === project.toLowerCase());
     if (repo) return { dir: repo[1] };
   }
 
@@ -169,7 +168,7 @@ if (cmd) {
 }
 
 if (output.length) {
-  // Create an output file that can be sourced as simply running commands from
+  // Create an output file that can be sourced, as simply running commands from
   // this script will not actually change the directory or set env vars.
   CONFIG?.verbose && echo(output.join('\n') + '\n');
   output.unshift('set -o pipefail'); // Bail out immediately if any commands fail
