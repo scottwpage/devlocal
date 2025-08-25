@@ -153,6 +153,7 @@ if (project) {
 
   if (!cmd) {
     cd(targetDir);
+
     if (fs.existsSync('.git')) {
       echo(await $`git branch`);
     }
