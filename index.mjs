@@ -141,6 +141,10 @@ if (project) {
   const targetDir = `${CONFIG.baseDir}/${selectedProject.dir}`;
   output.push(`cd ${targetDir}`);
 
+  if (fs.existsSync('.nvmrc')) {
+    output.push(`nvm use`);
+  }
+
   // Set specified environment variables
   const envs = selectedProject['env'] || {};
   for (const [key, value] of Object.entries(envs)) {
@@ -163,6 +167,7 @@ if (project) {
 if (cmd) {
   // Choose project-specific command over general command
   const command = selectedProject?.cmds?.[cmd] || COMMANDS[cmd];
+
   if (command) {
     output.push(Array.isArray(command) ? command.join(' && ') : command);
   } else {
