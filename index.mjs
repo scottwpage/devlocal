@@ -137,7 +137,7 @@ if (!cmd && !project) {
 const selectedProject = getSelectedProject(project);
 const output = [];
 
-if (project) {
+if (project && (!cmd || cmd !== 'pwd')) {
   const targetDir = `${CONFIG.baseDir}/${selectedProject.dir}`;
   output.push(`cd ${targetDir}`);
 
@@ -159,6 +159,7 @@ if (project) {
     }
     // Run any specified init commands after navigating to project
     const initCommands = selectedProject['init_cmds'] || [];
+
     for (const cmd of initCommands) {
       output.push(cmd);
     }
@@ -171,6 +172,8 @@ if (cmd) {
 
   if (command) {
     output.push(Array.isArray(command) ? command.join(' && ') : command);
+  } else if (cmd === 'pwd') {
+    output.push(`echo ${CONFIG.baseDir}/${selectedProject.dir}`);
   } else {
     echo(`Command not found: ${cmd}`);
     process.exit(1);
