@@ -86,38 +86,6 @@ General commands
   run
 ```
 
-## Architecture (Refactored)
-
-The codebase has been refactored into modular components for better maintainability and testability:
-
-### Modules
-
-- **`src/config.mjs`** - Configuration file loading and initialization
-- **`src/repo-utils.mjs`** - Repository discovery and project selection
-- **`src/command-generator.mjs`** - Shell command generation and file writing
-- **`src/display.mjs`** - Usage information display
-- **`src/git-utils.mjs`** - Git-related utilities
-
-### Testing
-
-The project includes comprehensive unit tests for all modules:
-
-```bash
-npm test                # Run all tests
-npm run test:watch      # Run tests in watch mode
-```
-
-Tests are located in the `test/` directory and use Node.js built-in test runner.
-
-The refactored code maintains full backward compatibility with existing shell functions while providing:
-
-- ✅ Modular, testable architecture
-- ✅ Comprehensive unit test coverage
-- ✅ Better error handling
-- ✅ Improved maintainability
-- ✅ No classes (functional approach)
-- ✅ Works with existing bash/zsh functions
-
 ### Customize Projects
 
 `~/.devlocal/projects.yml`
