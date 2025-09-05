@@ -14,6 +14,7 @@ export const displayUsage = ({ repos, projects, commands, config }) => {
   console.log(
     `\nNavigate between projects, set env variables and run commands.
     \nUsage:  dl <command> [<project>]
+   or   dl pwd <project>
    or:  go <project>`
   );
 

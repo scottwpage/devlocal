@@ -9,7 +9,7 @@ $.verbose = false;
 import { initConfig, getOutputPath } from './src/config.mjs';
 import { findRepos, getSelectedProject } from './src/repo-utils.mjs';
 import { generateCommands, writeCommands } from './src/command-generator.mjs';
-import { displayUsage } from './src/display.mjs';
+import { displayUsage } from './src/usage.mjs';
 import { showGitBranch } from './src/git-utils.mjs';
 
 /**

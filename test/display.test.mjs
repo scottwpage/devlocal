@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
-import { displayUsage } from '../src/display.mjs';
+import { displayUsage } from '../src/usage.mjs';
 
 // Mock chalk for testing
 const mockChalk = {
