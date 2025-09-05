@@ -45,7 +45,7 @@ npm i
 function dl() {
   ~/Projects/devlocal/index.mjs "${1}" "${2}" # Change path to reflect your projects directory
   sourcePath=~/.devlocal/commands.sh
-  [ -f $sourcePath ]; then
+  if [ -f $sourcePath ]; then
     source $sourcePath || echo 'failed'
   fi
 }
@@ -104,7 +104,7 @@ myapp:
     - nvm use 18
   cmds: # project-specific commands that can over-ride general commands (optional)
     build: 'yarn build'
-    run: 'yarn start
+    run: 'yarn start'
 ```
 
 ### Customize Commands
@@ -114,7 +114,7 @@ myapp:
 ```yml
   # Non project-specific commands
   build: 'npm build'
-  run: 'npm start
+  run: 'npm start'
   foo: ['cd foo', 'ls -la', 'cd -'] # This will be interpreted as `cd foo && ls -la && cd -`
 ```
 
