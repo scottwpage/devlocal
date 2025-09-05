@@ -173,7 +173,7 @@ if (cmd) {
   if (command) {
     output.push(Array.isArray(command) ? command.join(' && ') : command);
   } else if (cmd === 'pwd') {
-    output.push(`echo ${CONFIG.baseDir}/${selectedProject.dir}`);
+    output.push(`echo ${CONFIG.baseDir}/${selectedProject?.dir}`);
   } else {
     echo(`Command not found: ${cmd}`);
     process.exit(1);
