@@ -1,0 +1,19 @@
+{
+  "testEnvironment": "node",
+  "setupFilesAfterEnv": ["<rootDir>/test/setup.mjs"],
+  "transform": {},
+  "testMatch": [
+    "**/test/**/*.test.mjs"
+  ],
+  "collectCoverageFrom": [
+    "*.mjs",
+    "!test/**",
+    "!node_modules/**"
+  ],
+  "coverageDirectory": "coverage",
+  "coverageReporters": [
+    "text",
+    "lcov",
+    "html"
+  ]
+}
