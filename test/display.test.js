@@ -1,16 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
-import { displayUsage } from '../src/usage.mjs';
-
-// Mock chalk for testing
-const mockChalk = {
-  white: { bgBlue: { bold: (text) => text } },
-  blue: (text) => text,
-  green: (text) => text
-};
-
-// Replace zx chalk with mock
-global.chalk = mockChalk;
+import { displayUsage } from '../src/usage.js';
 
 describe('display module', () => {
   test('displayUsage outputs project information', () => {

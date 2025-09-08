@@ -1,16 +1,10 @@
-#!/usr/bin/env zx
+#!/usr/bin/env node
 
-// import ZX global for better autocomplete
-import 'zx/globals';
-
-// Don't print commands
-$.verbose = false;
-
-import { initConfig, getOutputPath } from './src/config.mjs';
-import { findRepos, getSelectedProject } from './src/repo-utils.mjs';
-import { generateCommands, writeCommands } from './src/command-generator.mjs';
-import { displayUsage } from './src/usage.mjs';
-import { showGitBranch } from './src/git-utils.mjs';
+import { initConfig, getOutputPath } from './src/config.js';
+import { findRepos, getSelectedProject } from './src/repo-utils.js';
+import { generateCommands, writeCommands } from './src/command-generator.js';
+import { displayUsage } from './src/usage.js';
+import { showGitBranch } from './src/git-utils.js';
 
 /**
  * Main application function
@@ -22,7 +16,8 @@ const main = async () => {
   // Find all repositories
   const repos = findRepos(config.baseDir, config.baseDir);
 
-  const [_, cmd, project] = argv._;
+  const args = process.argv.slice(2);
+  const [cmd, project] = args;
 
   // Show usage if no arguments provided
   if (!cmd && !project) {

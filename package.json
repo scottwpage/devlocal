@@ -2,19 +2,18 @@
   "name": "devlocal",
   "version": "1.0.0",
   "description": "A utility to navigate to projects, set environment variables and run arbitrary commands.",
-  "main": "index.mjs",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --test test/*.test.mjs",
-    "test:watch": "node --test --watch test/*.test.mjs"
+    "test": "node --test test/*.test.js",
+    "test:watch": "node --test --watch test/*.test.js"
   },
   "author": "Scott Page",
   "license": "ISC",
   "dependencies": {
-    "zx": "^7.2.2"
+    "chalk": "^5.3.0",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
-    "node:test": "*",
-    "node:assert": "*"
   }
 }

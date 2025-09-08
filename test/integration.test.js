@@ -7,7 +7,7 @@ import os from 'os';
 
 describe('integration tests', () => {
   test('script executes without errors when called with no arguments', async () => {
-    const child = spawn('node', ['index.mjs'], {
+    const child = spawn('node', ['index.js'], {
       cwd: process.cwd(),
       stdio: ['pipe', 'pipe', 'pipe']
     });
@@ -34,7 +34,7 @@ describe('integration tests', () => {
   });
 
   test('script handles unknown command gracefully', async () => {
-    const child = spawn('node', ['index.mjs', 'unknown-command', 'unknown-project'], {
+    const child = spawn('node', ['index.js', 'unknown-command', 'devlocal'], {
       cwd: process.cwd(),
       stdio: ['pipe', 'pipe', 'pipe']
     });
@@ -56,7 +56,7 @@ describe('integration tests', () => {
 
   test('script can be called with go function simulation', async () => {
     // Simulate the go function by calling with empty first argument
-    const child = spawn('node', ['index.mjs', '', 'devlocal'], {
+    const child = spawn('node', ['index.js', '', 'devlocal'], {
       cwd: process.cwd(),
       stdio: ['pipe', 'pipe', 'pipe']
     });

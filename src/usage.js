@@ -1,4 +1,4 @@
-import { chalk } from 'zx';
+import chalk from 'chalk';
 
 /**
  * Display usage information and available projects/commands

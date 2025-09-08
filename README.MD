@@ -1,6 +1,6 @@
 # devlocal
 
-A utility to navigate to projects, set environment variables and run arbitrary commands.
+A utility to navigate to projects, set environment variables and run defined commands.
 
 ## Usage
 
@@ -25,10 +25,6 @@ A utility to navigate to projects, set environment variables and run arbitrary c
 
 ## Installation
 
-### Install Google ZX
-
-`npm i -g zx`
-
 ### Clone `devlocal` repo and install
 
 ```bash
@@ -43,7 +39,7 @@ npm i
 ```bash
 # Run `dl` (devlocal) to run project-specific and general commands
 function dl() {
-  ~/Projects/devlocal/index.mjs "${1}" "${2}" # Change path to reflect your projects directory
+  ~/Projects/devlocal/index.js "${1}" "${2}" # Change path to reflect your projects directory
   sourcePath=~/.devlocal/commands.sh
   if [ -f $sourcePath ]; then
     source $sourcePath || echo 'failed'

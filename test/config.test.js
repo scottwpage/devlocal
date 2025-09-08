@@ -3,29 +3,7 @@ import assert from 'node:assert';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { initConfig, getBaseDir, getOutputPath } from '../src/config.mjs';
-
-// Mock YAML for testing
-const mockYAML = {
-  parse: (content) => {
-    // Simple YAML parser mock for testing
-    const lines = content.split('\n');
-    const result = {};
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (trimmed && !trimmed.startsWith('#')) {
-        const [key, value] = trimmed.split(':').map(s => s.trim());
-        if (key && value) {
-          result[key] = value;
-        }
-      }
-    }
-    return result;
-  }
-};
-
-// Replace the zx YAML import with our mock
-global.YAML = mockYAML;
+import { initConfig, getBaseDir, getOutputPath } from '../src/config.js';
 
 describe('config module', () => {
   const testBaseDir = path.join(os.tmpdir(), 'devlocal-test');

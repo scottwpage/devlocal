@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { getDirectories, findRepos, getSelectedProject } from '../src/repo-utils.mjs';
+import { getDirectories, findRepos, getSelectedProject } from '../src/repo-utils.js';
 
 describe('repo-utils module', () => {
   const testDir = path.join(os.tmpdir(), 'devlocal-repo-test');
