@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { generateCommands, writeCommands } from '../src/command-generator.mjs';
+import { generateCommands, writeCommands } from '../src/command-generator.js';
 
 describe('command-generator module', () => {
   test('generateCommands creates basic navigation commands', () => {

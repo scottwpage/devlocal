@@ -1,6 +1,6 @@
 import fs from 'fs';
 import os from 'os';
-import { YAML } from 'zx';
+import yaml from 'js-yaml';
 
 const baseDir = `${os.homedir()}/.devlocal`;
 const outputPath = `${baseDir}/commands.sh`;
@@ -26,7 +26,7 @@ export const initConfig = () => {
 
   // Load yml files
   for (let configFile of configKeys) {
-    const parsed = YAML.parse(fs.readFileSync(`${baseDir}/${configFile}.yml`, 'utf8'));
+    const parsed = yaml.load(fs.readFileSync(`${baseDir}/${configFile}.yml`, 'utf8'));
     configFiles[configFile] = Object.assign(configFiles[configFile], parsed);
   }
 
